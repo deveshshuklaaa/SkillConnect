@@ -6,6 +6,15 @@
 
   <display-name>SkillConnect</display-name>
 
+  <!-- Session configuration -->
+  <session-config>
+    <session-timeout>30</session-timeout> <!-- minutes -->
+    <cookie-config>
+      <http-only>true</http-only>
+      <secure>true</secure>
+    </cookie-config>
+  </session-config>
+
   <!-- Servlets are mapped via annotations; this file can remain minimal -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

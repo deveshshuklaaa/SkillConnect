@@ -1,3 +1,4 @@
+com\skillconnect\servlets\Config.class
 com\skillconnect\servlets\DBConnection.class
 com\skillconnect\servlets\LoginServlet.class
 com\skillconnect\servlets\LogoutServlet.class
