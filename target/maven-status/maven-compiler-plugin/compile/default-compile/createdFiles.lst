@@ -1,0 +1,4 @@
+com\skillconnect\servlets\DBConnection.class
+com\skillconnect\servlets\LoginServlet.class
+com\skillconnect\servlets\LogoutServlet.class
+com\skillconnect\servlets\RegisterServlet.class
