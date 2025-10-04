@@ -29,7 +29,7 @@
       margin-bottom: 30px;
       text-align: center;
     }
-    .form-control {
+    .form-control, .form-select {
       background: rgba(255,255,255,0.05);
       border: none;
       color: #e6eef6;
@@ -74,7 +74,11 @@
       <input type="email" class="form-control" name="email" placeholder="Email" required>
       <input type="password" class="form-control" name="password" placeholder="Password" required>
       <input type="text" class="form-control" name="phone" placeholder="Phone" required>
-      <input type="text" class="form-control" name="role" placeholder="Role" required>
+      <select class="form-select" name="role" required>
+        <option value="">Select Role</option>
+        <option value="Worker">Worker</option>
+        <option value="Employer">Employer</option>
+      </select>
       <input type="text" class="form-control" name="location" placeholder="Location" required>
       <input type="text" class="form-control" name="skills" placeholder="Skills" required>
       <button type="submit" class="btn-register">Register</button>

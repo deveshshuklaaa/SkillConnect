@@ -1,10 +1,4 @@
-<%@ page import="jakarta.servlet.http.*" %>
-<%
-    HttpSession sess = request.getSession();
-    if (sess.getAttribute("csrfToken") == null) {
-        sess.setAttribute("csrfToken", java.util.UUID.randomUUID().toString());
-    }
-%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,29 +54,7 @@
     /* Footer */
     .footer{background:var(--card);padding:30px 0;color:var(--muted);text-align:center;border-radius:var(--radius);margin-top:40px;}
 
-    /* Overlays */
-    .overlay{
-      position:fixed; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-      display:flex; justify-content:center; align-items:center; z-index:1000;
-      opacity:0; visibility:hidden; transition:0.3s;
-    }
-    .overlay.active{opacity:1; visibility:visible;}
 
-    .login-box, .register-box{
-      background:var(--card); padding:40px; border-radius:var(--radius);
-      box-shadow:var(--shadow); width:100%; max-width:400px; position:relative;
-    }
-    .login-box h3, .register-box h3{ text-align:center; margin-bottom:30px; color:var(--accent);}
-    .form-control{background:rgba(255,255,255,0.05);border:none;color:#e6eef6;border-radius:var(--radius); margin-bottom:15px;}
-    .form-control::placeholder{color: #9aa4b2; opacity:1;}
-    .btn-login, .btn-register{
-      background:var(--accent); border:none; color:#042021; font-weight:600; border-radius:var(--radius); width:100%; padding:12px; transition:0.3s;
-    }
-    .btn-login:hover, .btn-register:hover{background:linear-gradient(90deg,var(--accent),var(--secondary));}
-    .close-btn{position:absolute;top:10px;right:15px;font-size:1.5rem;cursor:pointer;color:var(--accent);}
-    a.btn-outline-secondary{border-color:var(--accent); color:var(--accent);}
-    a.btn-outline-secondary:hover{background:var(--accent); color:#042021;}
   </style>
 </head>
 <body>
@@ -92,8 +64,8 @@
     <div class="container">
       <a class="navbar-brand" href="#">SkillConnect</a>
       <div class="navbar-nav ms-auto">
-        <a class="nav-link" id="openRegisterBtn"><i class="bi bi-person-plus me-1"></i>Register</a>
-        <a class="nav-link" id="openLoginBtn"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a>
+        <a class="nav-link" href="register.jsp"><i class="bi bi-person-plus me-1"></i>Register</a>
+        <a class="nav-link" href="login.jsp"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a>
       </div>
     </div>
   </nav>
@@ -182,48 +154,7 @@
   <!-- Footer -->
   <div class="footer">&copy; 2025 SkillConnect. All rights reserved.</div>
 
-  <!-- Register Overlay -->
-  <div class="overlay" id="registerOverlay">
-    <div class="register-box">
-      <span class="close-btn" id="closeRegisterBtn">&times;</span>
-      <h3>Create Account</h3>
-      <form action="register" method="POST">
-        <input type="hidden" name="csrfToken" value="<%= sess.getAttribute("csrfToken") %>">
-        <input type="text" class="form-control" name="fullname" placeholder="Full Name" required>
-        <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
-        <input type="tel" class="form-control" name="phone" placeholder="+91XXXXXXXXXX">
-        <select class="form-select mb-3" name="role" required>
-          <option value="">Select Role</option>
-          <option value="Worker">Worker</option>
-          <option value="Employer">Employer</option>
-        </select>
-        <input type="text" class="form-control" name="location" placeholder="Location">
-        <input type="text" class="form-control" name="skills" placeholder="Skills">
-        <input type="password" class="form-control" name="password" placeholder="Password" required>
-        <button type="submit" class="btn-register">Register</button>
-      </form>
-      <p class="text-center mt-3">
-        Already have an account? <a href="#" class="btn btn-outline-secondary btn-sm" id="switchToLogin">Login</a>
-      </p>
-    </div>
-  </div>
 
-  <!-- Login Overlay -->
-  <div class="overlay" id="loginOverlay">
-    <div class="login-box">
-      <span class="close-btn" id="closeLoginBtn">&times;</span>
-      <h3>Login</h3>
-      <form action="login" method="POST">
-        <input type="hidden" name="csrfToken" value="<%= sess.getAttribute("csrfToken") %>">
-        <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
-        <input type="password" class="form-control" name="password" placeholder="Enter password" required>
-        <button type="submit" class="btn-login">Login</button>
-      </form>
-      <p class="text-center mt-3">
-        New user? <a href="#" class="btn btn-outline-secondary btn-sm" id="switchToRegister">Register</a>
-      </p>
-    </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
@@ -240,26 +171,7 @@
       setTimeout(()=>slides[prev].classList.remove('prev'),1000);
     },5000);
 
-    // Overlay Logic
-    const registerOverlay = document.getElementById('registerOverlay');
-    const openRegisterBtn = document.getElementById('openRegisterBtn');
-    const closeRegisterBtn = document.getElementById('closeRegisterBtn');
-    const switchToLogin = document.getElementById('switchToLogin');
 
-    const loginOverlay = document.getElementById('loginOverlay');
-    const openLoginBtn = document.getElementById('openLoginBtn');
-    const closeLoginBtn = document.getElementById('closeLoginBtn');
-    const switchToRegister = document.getElementById('switchToRegister');
-
-    openRegisterBtn.addEventListener('click', e=>{ e.preventDefault(); registerOverlay.classList.add('active'); });
-    closeRegisterBtn.addEventListener('click', ()=>{ registerOverlay.classList.remove('active'); });
-    registerOverlay.addEventListener('click', e=>{ if(e.target===registerOverlay) registerOverlay.classList.remove('active'); });
-    switchToLogin.addEventListener('click', e=>{ e.preventDefault(); registerOverlay.classList.remove('active'); loginOverlay.classList.add('active'); });
-
-    openLoginBtn.addEventListener('click', e=>{ e.preventDefault(); loginOverlay.classList.add('active'); });
-    closeLoginBtn.addEventListener('click', ()=>{ loginOverlay.classList.remove('active'); });
-    loginOverlay.addEventListener('click', e=>{ if(e.target===loginOverlay) loginOverlay.classList.remove('active'); });
-    switchToRegister.addEventListener('click', e=>{ e.preventDefault(); loginOverlay.classList.remove('active'); registerOverlay.classList.add('active'); });
   </script>
 </body>
 </html>
