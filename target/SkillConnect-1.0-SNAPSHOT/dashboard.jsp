@@ -44,7 +44,7 @@
       margin-bottom: 30px;
     }
     .btn-logout {
-      background: #f97316;
+      background: #6ee7b7;
       border: none;
       color: #042021;
       font-weight: 600;
@@ -53,7 +53,7 @@
       transition: 0.3s;
     }
     .btn-logout:hover {
-      background: linear-gradient(90deg, #f97316, #6ee7b7);
+      background: linear-gradient(90deg, #6ee7b7, #f97316);
     }
   </style>
 </head>
