@@ -25,6 +25,7 @@ public class LoginServlet extends HttpServlet {
         String sessionToken = (String) request.getSession().getAttribute("csrfToken");
         String requestToken = request.getParameter("csrfToken");
         if (sessionToken == null || !sessionToken.equals(requestToken)) {
+            getServletContext().log("CSRF token mismatch: sessionToken=" + sessionToken + ", requestToken=" + requestToken);
             response.sendRedirect("login.jsp?error=csrf");
             return;
         }

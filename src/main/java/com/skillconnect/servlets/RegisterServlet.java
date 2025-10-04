@@ -20,45 +20,75 @@ public class RegisterServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // CSRF protection
-        String sessionToken = (String) request.getSession().getAttribute("csrfToken");
-        String requestToken = request.getParameter("csrfToken");
-        if (sessionToken == null || !sessionToken.equals(requestToken)) {
-            response.sendRedirect("register.jsp?error=csrf");
-            return;
-        }
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        try {
+            // CSRF protection
+            String sessionToken = (String) request.getSession().getAttribute("csrfToken");
+            String requestToken = request.getParameter("csrfToken");
+            if (sessionToken == null || !sessionToken.equals(requestToken)) {
+                getServletContext().log("CSRF token mismatch: sessionToken=" + sessionToken + ", requestToken=" + requestToken);
+                response.sendRedirect("register.jsp?error=csrf");
+                return;
+            }
+            String name = request.getParameter("fullname");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String phone = request.getParameter("phone");
+            String role = request.getParameter("role");
+            String location = request.getParameter("location");
+            String skills = request.getParameter("skills");
 
-        // Server-side validation
-        if (name == null || name.trim().isEmpty() || name.length() > 150) {
-            response.sendRedirect("register.jsp?error=name");
-            return;
-        }
-        if (email == null || !EMAIL_PATTERN.matcher(email).matches() || email.length() > 150) {
-            response.sendRedirect("register.jsp?error=email");
-            return;
-        }
-        if (password == null || password.length() < 6) {
-            response.sendRedirect("register.jsp?error=password");
-            return;
-        }
+            // Server-side validation
+            if (name == null || name.trim().isEmpty() || name.length() > 150) {
+                response.sendRedirect("register.jsp?error=name");
+                return;
+            }
+            if (phone != null && !phone.isEmpty() && !phone.matches("\\+?\\d{10,15}")) {
+                response.sendRedirect("register.jsp?error=phone");
+                return;
+            }
+            if (role == null || role.trim().isEmpty()) {
+                response.sendRedirect("register.jsp?error=role");
+                return;
+            }
+            if (location != null && location.length() > 100) {
+                response.sendRedirect("register.jsp?error=location");
+                return;
+            }
+            if (skills != null && skills.length() > 500) {
+                response.sendRedirect("register.jsp?error=skills");
+                return;
+            }
+            if (email == null || !EMAIL_PATTERN.matcher(email).matches() || email.length() > 150) {
+                response.sendRedirect("register.jsp?error=email");
+                return;
+            }
+            if (password == null || password.length() < 6) {
+                response.sendRedirect("register.jsp?error=password");
+                return;
+            }
 
-        // Hash the password
-        String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+            // Hash the password
+            String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
 
-        try (Connection conn = DBConnection.getConnection()) {
-            String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, name.trim());
-            ps.setString(2, email.trim().toLowerCase());
-            ps.setString(3, hashedPassword);
-            ps.executeUpdate();
-            response.sendRedirect("login.jsp?registered=true");
-        } catch (SQLException e) {
-            // Log the error internally, don't expose to user
-            getServletContext().log("Database error during registration", e);
+            try (Connection conn = DBConnection.getConnection()) {
+                String sql = "INSERT INTO users (name, email, password, phone, role, location, skills) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, name.trim());
+                ps.setString(2, email.trim().toLowerCase());
+                ps.setString(3, hashedPassword);
+                ps.setString(4, phone != null ? phone.trim() : null);
+                ps.setString(5, role.trim());
+                ps.setString(6, location != null ? location.trim() : null);
+                ps.setString(7, skills != null ? skills.trim() : null);
+                ps.executeUpdate();
+                response.sendRedirect("login.jsp?registered=true");
+            } catch (SQLException e) {
+                // Log the error internally, don't expose to user
+                getServletContext().log("Database error during registration", e);
+                response.sendRedirect("register.jsp?error=server");
+            }
+        } catch (Exception ex) {
+            getServletContext().log("Unexpected error during registration", ex);
             response.sendRedirect("register.jsp?error=server");
         }
     }

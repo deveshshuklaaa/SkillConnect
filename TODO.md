@@ -12,3 +12,6 @@
 - [x] Implement CSRF protection: add tokens to HTML forms and validate in servlets
 - [x] Update web.xml for session timeout and secure cookies
 - [x] Test the application functionality after fixes (compiled successfully)
+- [x] Update db/schema.sql to add columns for phone, role, location, skills in users table
+- [x] Update RegisterServlet.java to handle fullname, phone, role, location, skills parameters with validation and DB insert
+- [ ] Test registration functionality with new fields
