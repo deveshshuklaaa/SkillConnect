@@ -33,7 +33,6 @@
         <div class="container">
             <a class="navbar-brand" href="index.jsp">SkillConnect</a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="customerDashboard.jsp">Dashboard</a>
                 <a class="nav-link active" href="bookingHistory.jsp">Booking History</a>
                 <a class="btn btn-danger ms-2" href="logout.jsp">Logout</a>
             </div>

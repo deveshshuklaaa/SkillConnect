@@ -24,7 +24,6 @@
         <div class="container">
             <a class="navbar-brand" href="index.jsp">SkillConnect</a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="index.jsp">Home</a>
                 <a class="nav-link active" href="serviceList.jsp">Services</a>
                 <a class="nav-link" href="index.jsp#about">About</a>
                 <a class="nav-link" href="index.jsp#contact">Contact</a>
@@ -45,20 +44,27 @@
                     <label for="locationFilter" class="form-label">Filter by Location</label>
                     <select class="form-select" id="locationFilter">
                         <option value="">All Locations</option>
-                        <option value="New York">New York</option>
-                        <option value="Los Angeles">Los Angeles</option>
-                        <!-- Add more locations as needed -->
+                        <option value="Delhi">Delhi</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="serviceFilter" class="form-label">Filter by Service Type</label>
                     <select class="form-select" id="serviceFilter">
                         <option value="">All Services</option>
-                        <option value="Electrical">Electrical</option>
+                        <option value="Cleaning">Cleaning</option>
                         <option value="Plumbing">Plumbing</option>
-                        <option value="Woodwork">Woodwork</option>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Cabinet">Cabinet</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Carpentry">Carpentry</option>
+                        <option value="Painting">Painting</option>
+                        <option value="Appliance Repair">Appliance Repair</option>
+                        <option value="Pest Control">Pest Control</option>
+                        <option value="Home Salon">Home Salon</option>
+                        <option value="Car Wash">Car Wash</option>
+                        <option value="AC Service">AC Service</option>
                     </select>
                 </div>
             </form>
@@ -127,6 +133,18 @@
 
             locationFilter.addEventListener('change', filterServices);
             serviceFilter.addEventListener('change', filterServices);
+
+            // Set filters from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const cityParam = urlParams.get('city');
+            if (cityParam) {
+                locationFilter.value = cityParam;
+            }
+            const serviceParam = urlParams.get('service');
+            if (serviceParam) {
+                serviceFilter.value = serviceParam;
+            }
+            filterServices(); // Apply filters on load
         });
     </script>
 </body>

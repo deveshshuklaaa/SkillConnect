@@ -63,3 +63,14 @@
 - [x] Verify all files created
 - [x] Ensure no syntax errors
 - [x] Provide instructions for setup
+
+## 11. Navigation Updates
+- [x] Remove "Home" link from about.jsp
+- [x] Remove "Home" link from contact.jsp
+- [x] Remove "Home" link from profile.jsp
+- [x] Remove "Home" link from customerHome.jsp
+- [x] Remove "Home" link from rate.jsp
+- [x] Change logo href to index.jsp in profile.jsp
+- [x] Change logo href to index.jsp in customerHome.jsp
+- [x] Change logo href to index.jsp in rate.jsp
+- [x] Delete customerHome.jsp
