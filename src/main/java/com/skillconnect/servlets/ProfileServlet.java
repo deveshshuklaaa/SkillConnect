@@ -36,9 +36,9 @@ public class ProfileServlet extends HttpServlet {
         boolean success = userDAO.updateUser(user);
         if (success) {
             session.setAttribute("user", user);
-            response.sendRedirect(user.getRole().equals("customer") ? "customerDashboard.jsp?message=Profile updated" : "workerDashboard.jsp?message=Profile updated");
+            response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?message=Profile updated" : "workerDashboard.jsp?message=Profile updated");
         } else {
-            response.sendRedirect(user.getRole().equals("customer") ? "customerDashboard.jsp?error=Update failed" : "workerDashboard.jsp?error=Update failed");
+            response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?error=Update failed" : "workerDashboard.jsp?error=Update failed");
         }
     }
 }
