@@ -28,7 +28,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">SkillConnect</a>
+            <a class="navbar-brand" href="index.jsp">SkillConnect</a>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="#profile">Profile</a>
                 <a class="nav-link" href="#services">Services</a>

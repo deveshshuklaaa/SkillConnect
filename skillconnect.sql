@@ -74,9 +74,9 @@ CREATE TABLE admin (
 INSERT INTO admin (username, password) VALUES ('admin@skillconnect.com', 'admin123'); -- Note: In production, hash passwords
 
 INSERT INTO users (name, email, password, phone, role, location) VALUES
-('John Doe', 'john@example.com', 'password123', '1234567890', 'customer', 'New York'),
-('Jane Smith', 'jane@example.com', 'password123', '0987654321', 'worker', 'New York'),
-('Bob Johnson', 'bob@example.com', 'password123', '1122334455', 'worker', 'Los Angeles');
+('John Doe', 'john@example.com', 'password123', '1234567890', 'customer', 'Delhi'),
+('Jane Smith', 'jane@example.com', 'password123', '0987654321', 'worker', 'Mumbai'),
+('Bob Johnson', 'bob@example.com', 'password123', '1122334455', 'worker', 'Bangalore');
 
 INSERT INTO worker_skills (worker_id, skill_name) VALUES
 (2, 'Electrician'),
@@ -91,3 +91,26 @@ INSERT INTO services (worker_id, service_name, price, status) VALUES
 (3, 'Woodwork', 60.00, 'active'),
 (3, 'Furniture Assembly', 30.00, 'active'),
 (3, 'Cabinet Installation', 80.00, 'active');
+
+-- Categories table
+CREATE TABLE IF NOT EXISTS categories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(50) NOT NULL,
+    description TEXT
+);
+
+-- Add category_id to services table
+ALTER TABLE services 
+ADD COLUMN category_id INT AFTER status,
+ADD FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE SET NULL;
+
+-- Sample categories
+INSERT INTO categories (category_name, description) VALUES
+('Electrical', 'Electrical services like wiring and repairs'),
+('Plumbing', 'Plumbing and pipe services'),
+('Carpentry', 'Woodwork and furniture services');
+
+-- Update sample services with category_ids
+UPDATE services SET category_id = 1 WHERE service_name IN ('Electrical Repair', 'Wiring Installation');
+UPDATE services SET category_id = 2 WHERE service_name IN ('Plumbing Fix', 'Pipe Repair');
+UPDATE services SET category_id = 3 WHERE service_name IN ('Woodwork', 'Furniture Assembly', 'Cabinet Installation');

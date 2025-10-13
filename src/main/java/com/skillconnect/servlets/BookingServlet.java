@@ -23,14 +23,9 @@ public class BookingServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-
         String action = request.getParameter("action");
         if ("rate".equals(action)) {
-            if (!"customer".equals(user.getRole())) {
+            if (user == null || !"customer".equals(user.getRole())) {
                 response.sendRedirect("login.jsp");
                 return;
             }
@@ -46,15 +41,20 @@ public class BookingServlet extends HttpServlet {
             }
             response.sendRedirect("bookingHistory.jsp?message=Rating submitted");
         } else {
-            if (!"customer".equals(user.getRole())) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
-
             int serviceId = Integer.parseInt(request.getParameter("serviceId"));
             int workerId = Integer.parseInt(request.getParameter("workerId"));
             Date date = Date.valueOf(request.getParameter("date"));
             Time time = Time.valueOf(request.getParameter("time") + ":00");
+
+            if (user == null || !"customer".equals(user.getRole())) {
+                // Store pending booking data in session
+                session.setAttribute("pendingServiceId", serviceId);
+                session.setAttribute("pendingWorkerId", workerId);
+                session.setAttribute("pendingDate", date);
+                session.setAttribute("pendingTime", time);
+                response.sendRedirect("login.jsp");
+                return;
+            }
 
             Booking booking = new Booking(0, user.getUserId(), workerId, serviceId, date, time, "pending");
             boolean success = bookingDAO.createBooking(booking);
@@ -81,6 +81,10 @@ public class BookingServlet extends HttpServlet {
         } else if ("complete".equals(action)) {
             int bookingId = Integer.parseInt(request.getParameter("bookingId"));
             bookingDAO.updateBookingStatus(bookingId, "completed");
+            response.sendRedirect("workerDashboard.jsp");
+        } else if ("reject".equals(action)) {
+            int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+            bookingDAO.cancelBooking(bookingId);
             response.sendRedirect("workerDashboard.jsp");
         }
     }

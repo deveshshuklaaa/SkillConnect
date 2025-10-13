@@ -34,10 +34,32 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
-                <p class="mt-3">Don't have an account? <a href="index.jsp">Register</a></p>
+                <p class="mt-3">Don't have an account? <a href="#" onclick="showRegisterModal()">Register</a></p>
             </div>
         </div>
     </div>
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Register as</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <a href="customerRegister.jsp" class="btn btn-primary w-100 mb-2">Customer</a>
+                    <a href="workerRegister.jsp" class="btn btn-secondary w-100">Worker</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showRegisterModal() {
+            var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+            registerModal.show();
+        }
+    </script>
 </body>
 </html>

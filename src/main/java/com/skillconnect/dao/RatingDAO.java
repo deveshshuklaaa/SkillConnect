@@ -109,4 +109,16 @@ public class RatingDAO {
         }
         return null;
     }
+
+    public boolean deleteRating(int ratingId) {
+        String sql = "DELETE FROM ratings WHERE rating_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, ratingId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

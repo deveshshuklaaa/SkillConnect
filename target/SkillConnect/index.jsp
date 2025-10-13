@@ -89,9 +89,17 @@
                     <button type="submit" class="btn btn-primary btn-lg">Search</button>
                 </div>
             </form>
-            <% if (message != null && !message.isEmpty()) { %>
-                <div class="alert alert-info mt-4 mx-auto" style="max-width: 600px;">
-                    <%= message %>
+            <% String messageParam = request.getParameter("message");
+               String errorParam = request.getParameter("error");
+               if (messageParam != null && !messageParam.isEmpty()) { %>
+                <div id="successAlert" class="alert alert-success alert-dismissible fade show mt-4 mx-auto" style="max-width: 600px;" role="alert">
+                    <%= messageParam %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } else if (errorParam != null && !errorParam.isEmpty()) { %>
+                <div id="errorAlert" class="alert alert-danger alert-dismissible fade show mt-4 mx-auto" style="max-width: 600px;" role="alert">
+                    <%= errorParam %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <% } %>
         </div>
@@ -163,6 +171,23 @@
             var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
             registerModal.show();
         }
+        // Auto-hide alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const successAlert = document.getElementById('successAlert');
+            const errorAlert = document.getElementById('errorAlert');
+            if (successAlert) {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(successAlert);
+                    bsAlert.close();
+                }, 5000);
+            }
+            if (errorAlert) {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(errorAlert);
+                    bsAlert.close();
+                }, 5000);
+            }
+        });
     </script>
 </body>
 </html>

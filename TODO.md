@@ -1,76 +1,31 @@
-# SkillConnect Project TODO
+# Admin Features Implementation TODO - Breakdown
 
-## 1. Project Structure
-- [x] Create src/main/java/com/skillconnect/ directory structure
-- [x] Create src/main/webapp/ directory
-- [x] Create src/main/webapp/WEB-INF/ directory
-- [x] Create src/main/webapp/jsp/ directory
-- [x] Create src/main/webapp/css/ directory
-- [x] Create src/main/webapp/js/ directory
+Based on the approved plan for enhancing the admin dashboard.
 
-## 2. Database
-- [x] Create skillconnect.sql with schema and tables
-- [x] Add sample data to skillconnect.sql
+## Steps:
 
-## 3. Models
-- [x] Create User.java
-- [x] Create WorkerSkill.java
-- [x] Create Service.java
-- [x] Create Booking.java
-- [x] Create Rating.java
-- [x] Create Admin.java
+- [x] 1. Edit AdminServlet.java: Add imports for CategoryDAO, ServiceDAO, BookingDAO, RatingDAO, StatsDAO, Category, Service, Booking, Rating, StatsDAO.TopRatedWorker, StatsDAO.PopularService.
 
-## 4. DAO Classes
-- [x] Create UserDAO.java
-- [x] Create WorkerSkillDAO.java
-- [x] Create ServiceDAO.java
-- [x] Create BookingDAO.java
-- [x] Create RatingDAO.java
-- [x] Create AdminDAO.java
+- [x] 2. Edit AdminServlet.java: In doGet method, add handling for actions: addCategory (create Category from params, call CategoryDAO.addCategory), editCategory (update Category), deleteCategory (call CategoryDAO.deleteCategory), addService (create Service, call ServiceDAO.addService), editService (update Service), deleteService (call ServiceDAO.deleteService), filterBookings (get params, call BookingDAO.getBookingsByFilter, set request attribute), reassignBooking (update booking.worker_id), deleteRating (call RatingDAO.deleteRating), getStats (call StatsDAO methods, set request attributes: totalUsers, activeBookings, topRatedWorker, popularServices).
 
-## 5. Utils
-- [x] Create DBConnection.java
+- [x] 3. Edit adminDashboard.jsp: Add imports for StatsDAO, CategoryDAO, RatingDAO, Category, Rating, StatsDAO.TopRatedWorker, StatsDAO.PopularService, List.
 
-## 6. Servlets
-- [x] Create RegisterCustomerServlet.java
-- [x] Create RegisterWorkerServlet.java
-- [x] Create LoginServlet.java
-- [x] Create BookingServlet.java
-- [x] Create ProfileServlet.java (for updates)
-- [x] Create AdminServlet.java (for admin actions)
+- [x] 4. Edit adminDashboard.jsp: In scriptlet, fetch stats: UserDAO.getTotalUsers(), StatsDAO.getActiveBookingsCount(), StatsDAO.getTopRatedWorker(), StatsDAO.getMostPopularServices(), CategoryDAO.getAllCategories(), RatingDAO.getAllRatings().
 
-## 7. JSP Pages
-- [x] Create index.jsp (homepage)
-- [x] Create register.jsp (popup or redirect) - modal in index.jsp
-- [x] Create customerRegister.jsp
-- [x] Create workerRegister.jsp
-- [x] Create login.jsp
-- [x] Create customerDashboard.jsp
-- [x] Create workerDashboard.jsp
-- [x] Create adminDashboard.jsp
-- [x] Create serviceList.jsp
-- [x] Create bookingHistory.jsp
-- [x] Other modular JSPs as needed (logout.jsp)
+- [x] 5. Edit adminDashboard.jsp: Add stats cards section at top: total users, active bookings, top-rated worker, most popular services.
 
-## 8. Configuration
-- [x] Create web.xml with servlet mappings
+- [x] 6. Edit adminDashboard.jsp: Add Manage Categories section with table displaying categories, and modals for add/edit/delete category (forms submitting to /admin?action=addCategory etc.).
 
-## 9. Styling and Scripts
-- [x] Create styles.css
-- [x] Create scripts.js (if needed)
+- [x] 7. Edit adminDashboard.jsp: Enhance All Bookings section with filter form: status dropdown, start/end date inputs, workerId/customerId inputs, submit button to /admin?action=filterBookings. Display filtered bookings if attribute set.
 
-## 10. Testing and Deployment
-- [x] Verify all files created
-- [x] Ensure no syntax errors
-- [x] Provide instructions for setup
+- [x] 8. Edit adminDashboard.jsp: Add Manage Feedback section with table of ratings (include customer, worker, rating, feedback), delete buttons for each rating.
 
-## 11. Navigation Updates
-- [x] Remove "Home" link from about.jsp
-- [x] Remove "Home" link from contact.jsp
-- [x] Remove "Home" link from profile.jsp
-- [x] Remove "Home" link from customerHome.jsp
-- [x] Remove "Home" link from rate.jsp
-- [x] Change logo href to index.jsp in profile.jsp
-- [x] Change logo href to index.jsp in customerHome.jsp
-- [x] Change logo href to index.jsp in rate.jsp
-- [x] Delete customerHome.jsp
+- [x] 9. Edit adminDashboard.jsp: For bookings table, add Reassign Provider column with button/modal to select new worker from dropdown (workers list), submit to /admin?action=reassignBooking&bookingId=...&newWorkerId=...
+
+- [x] 10. Compile the project: Run `mvn clean compile` to check for errors.
+
+- [ ] 11. Test: Login as admin, verify all new features (add/edit/delete categories/services, filter bookings, reassign worker, delete rating, stats display). Add sample data if needed.
+
+- [x] 12. Package: Run `mvn package` to build WAR.
+
+- [ ] 13. Update this TODO.md as each step is completed (mark [x]).

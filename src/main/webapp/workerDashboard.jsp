@@ -30,115 +30,151 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">SkillConnect</a>
+            <a class="navbar-brand" href="workerDashboard.jsp">SkillConnect</a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="#profile">Profile</a>
-                <a class="nav-link" href="#services">Services</a>
-                <a class="nav-link" href="#bookings">Bookings</a>
+                <a class="nav-link" href="workerProfile.jsp">Profile</a>
+                <a class="nav-link" href="workerServices.jsp">Services</a>
+                <a class="nav-link" href="workerBookings.jsp">Bookings</a>
                 <a class="btn btn-danger" href="logout.jsp">Logout</a>
             </div>
         </div>
     </nav>
 
     <div class="container mt-5">
-        <h2>Welcome, <%= user.getName() %></h2>
+        <div class="hero text-center bg-primary text-white py-5 rounded">
+            <h1>Welcome back, <%= user.getName() %>!</h1>
+            <p class="lead">Manage your services and bookings efficiently with SkillConnect.</p>
+        </div>
+
         <% String message = request.getParameter("message"); %>
         <% if (message != null) { %>
-            <div class="alert alert-success"><%= message %></div>
+            <div class="alert alert-success mt-3"><%= message %></div>
         <% } %>
         <% String error = request.getParameter("error"); %>
         <% if (error != null) { %>
-            <div class="alert alert-danger"><%= error %></div>
+            <div class="alert alert-danger mt-3"><%= error %></div>
         <% } %>
 
-        <!-- Profile Management -->
-        <div id="profile" class="mt-5">
-            <h3>Profile Management</h3>
-            <form action="profile" method="post">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="<%= user.getName() %>" required>
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card text-center h-100 shadow">
+                    <div class="card-body">
+                        <div class="display-4 text-primary mb-3">🔧</div>
+                        <h5 class="card-title">My Services</h5>
+                        <p class="card-text">Manage your offered services. Add, edit, or remove services to keep your profile up to date.</p>
+                        <a href="workerServices.jsp" class="btn btn-primary">View Services</a>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<%= user.getEmail() %>" required>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100 shadow">
+                    <div class="card-body">
+                        <div class="display-4 text-success mb-3">📅</div>
+                        <h5 class="card-title">Bookings</h5>
+                        <p class="card-text">View and manage your bookings. Accept, reject, or mark bookings as complete.</p>
+                        <a href="workerBookings.jsp" class="btn btn-success">View Bookings</a>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control" id="phone" name="phone" value="<%= user.getPhone() %>">
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100 shadow">
+                    <div class="card-body">
+                        <div class="display-4 text-info mb-3">👤</div>
+                        <h5 class="card-title">Profile</h5>
+                        <p class="card-text">Update your personal information and preferences to enhance your profile.</p>
+                        <a href="workerProfile.jsp" class="btn btn-info">Edit Profile</a>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="location" class="form-label">Location</label>
-                    <input type="text" class="form-control" id="location" name="location" value="<%= user.getLocation() %>">
-                </div>
-                <button type="submit" class="btn btn-primary">Update Profile</button>
-            </form>
+            </div>
         </div>
 
-        <!-- Service Management -->
-        <div id="services" class="mt-5">
-            <h3>My Services</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Service Name</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (Service service : services) { %>
-                        <tr>
-                            <td><%= service.getServiceName() %></td>
-                            <td>$<%= service.getPrice() %></td>
-                            <td><%= service.getStatus() %></td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header bg-light">
+                        <h5>Quick Stats</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Total Services:</strong> <%= services.size() %></p>
+                        <p><strong>Pending Bookings:</strong> <%= bookings.stream().filter(b -> "pending".equals(b.getStatus())).count() %></p>
+                        <p><strong>Completed Bookings:</strong> <%= bookings.stream().filter(b -> "completed".equals(b.getStatus())).count() %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header bg-light">
+                        <h5>Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <% for (int i = 0; i < Math.min(3, bookings.size()); i++) { %>
+                                <li><%= bookings.get(i).getStatus() %> booking on <%= bookings.get(i).getBookingDate() %></li>
+                            <% } %>
+                            <% if (bookings.isEmpty()) { %>
+                                <li>No recent activity.</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Booking Management -->
-        <div id="bookings" class="mt-5">
-            <h3>My Bookings</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Service</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (Booking booking : bookings) { %>
-                        <%
-                            User customer = userDAO.getUserById(booking.getCustomerId());
-                            Service service = serviceDAO.getServiceById(booking.getServiceId());
-                        %>
-                        <tr>
-                            <td><%= customer != null ? customer.getName() : "Unknown" %></td>
-                            <td><%= service != null ? service.getServiceName() : "Unknown" %></td>
-                            <td><%= booking.getBookingDate() %></td>
-                            <td><%= booking.getBookingTime() %></td>
-                            <td><%= booking.getStatus() %></td>
-                            <td>
-                                <% if ("pending".equals(booking.getStatus())) { %>
-                                    <a href="booking?action=accept&bookingId=<%= booking.getBookingId() %>" class="btn btn-success btn-sm">Accept</a>
-                                    <a href="booking?action=cancel&bookingId=<%= booking.getBookingId() %>" class="btn btn-danger btn-sm">Reject</a>
-                                <% } else if ("confirmed".equals(booking.getStatus())) { %>
-                                    <a href="booking?action=complete&bookingId=<%= booking.getBookingId() %>" class="btn btn-primary btn-sm">Mark Complete</a>
-                                <% } %>
-                            </td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+    <!-- Add Service Modal -->
+    <div class="modal fade" id="addServiceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="serviceModalTitle">Add New Service</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="serviceForm" action="service" method="post">
+                        <input type="hidden" name="action" id="serviceAction" value="add">
+                        <input type="hidden" name="serviceId" id="serviceId">
+                        <div class="mb-3">
+                            <label for="serviceName" class="form-label">Service Name</label>
+                            <input type="text" class="form-control" id="serviceName" name="serviceName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Service</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function editService(id, name, price, status) {
+            document.getElementById('serviceModalTitle').textContent = 'Edit Service';
+            document.getElementById('serviceAction').value = 'update';
+            document.getElementById('serviceId').value = id;
+            document.getElementById('serviceName').value = name;
+            document.getElementById('price').value = price;
+            document.getElementById('status').value = status;
+            var modal = new bootstrap.Modal(document.getElementById('addServiceModal'));
+            modal.show();
+        }
+
+        // Reset modal when closed
+        document.getElementById('addServiceModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('serviceModalTitle').textContent = 'Add New Service';
+            document.getElementById('serviceAction').value = 'add';
+            document.getElementById('serviceId').value = '';
+            document.getElementById('serviceForm').reset();
+        });
+    </script>
 </body>
 </html>
