@@ -128,6 +128,38 @@ public class UserDAO {
         return null;
     }
 
+    public boolean changePassword(int userId, String currentPassword, String newPassword) {
+        // First verify current password
+        String verifySql = "SELECT password FROM users WHERE user_id = ?";
+        String updateSql = "UPDATE users SET password = ? WHERE user_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement verifyStmt = conn.prepareStatement(verifySql);
+             PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+
+            // Verify current password
+            verifyStmt.setInt(1, userId);
+            ResultSet rs = verifyStmt.executeQuery();
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+                if (!storedPassword.equals(currentPassword)) {
+                    return false; // Current password is incorrect
+                }
+            } else {
+                return false; // User not found
+            }
+
+            // Update to new password
+            updateStmt.setString(1, newPassword);
+            updateStmt.setInt(2, userId);
+            return updateStmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public int getTotalUsers() {
         String sql = "SELECT COUNT(*) FROM users";
         try (Connection conn = DBConnection.getConnection();

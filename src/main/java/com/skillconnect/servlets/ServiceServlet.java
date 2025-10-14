@@ -27,9 +27,16 @@ public class ServiceServlet extends HttpServlet {
         String action = request.getParameter("action");
         if ("add".equals(action)) {
             String serviceName = request.getParameter("serviceName");
-            double price = Double.parseDouble(request.getParameter("price"));
+            String priceStr = request.getParameter("price");
             String status = request.getParameter("status");
-            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+
+            if (priceStr == null || priceStr.trim().isEmpty()) {
+                response.sendRedirect("workerServices.jsp?error=Price is required");
+                return;
+            }
+
+            double price = Double.parseDouble(priceStr);
+            int categoryId = 1; // Default category ID
 
             Service service = new Service(0, user.getUserId(), serviceName, price, status, categoryId);
             boolean success = serviceDAO.addService(service);

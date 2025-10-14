@@ -25,14 +25,11 @@ public class RegisterCustomerServlet extends HttpServlet {
         int result = userDAO.registerUser(user);
 
         if (result == 0) {
-            request.getSession().setAttribute("message", "Registration successful! Please login.");
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("customerRegister.jsp?message=Registration successful! Please login.");
         } else if (result == 1) {
-            request.getSession().setAttribute("error", "Email already exists. Please use a different email.");
-            response.sendRedirect("customerRegister.jsp");
+            response.sendRedirect("customerRegister.jsp?error=Email already exists. Please use a different email.");
         } else {
-            request.getSession().setAttribute("error", "Registration failed due to database error.");
-            response.sendRedirect("customerRegister.jsp");
+            response.sendRedirect("customerRegister.jsp?error=Registration failed due to database error.");
         }
     }
 }

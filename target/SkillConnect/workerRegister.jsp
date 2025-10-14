@@ -13,10 +13,19 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2>Worker Registration</h2>
-                <% String error = (String) session.getAttribute("error"); %>
+                <% String message = request.getParameter("message"); %>
+                <% if (message != null) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <%= message %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+                <% String error = request.getParameter("error"); %>
                 <% if (error != null) { %>
-                    <div class="alert alert-danger"><%= error %></div>
-                    <% session.removeAttribute("error"); %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%= error %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 <% } %>
                 <form action="registerWorker" method="post">
                     <div class="mb-3">
@@ -40,18 +49,46 @@
                         <input type="text" class="form-control" id="location" name="location" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Skills</label>
+                        <label class="form-label">Skills (Select multiple)</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="skills" value="Electrician" id="electrician">
-                            <label class="form-check-label" for="electrician">Electrician</label>
+                            <input class="form-check-input" type="checkbox" name="skills" value="Cleaning" id="cleaning">
+                            <label class="form-check-label" for="cleaning">Cleaning</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="skills" value="Plumber" id="plumber">
-                            <label class="form-check-label" for="plumber">Plumber</label>
+                            <input class="form-check-input" type="checkbox" name="skills" value="Plumbing" id="plumbing">
+                            <label class="form-check-label" for="plumbing">Plumbing</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="skills" value="Carpenter" id="carpenter">
-                            <label class="form-check-label" for="carpenter">Carpenter</label>
+                            <input class="form-check-input" type="checkbox" name="skills" value="Electrical" id="electrical">
+                            <label class="form-check-label" for="electrical">Electrical</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="skills" value="Carpentry" id="carpentry">
+                            <label class="form-check-label" for="carpentry">Carpentry</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="skills" value="Painting" id="painting">
+                            <label class="form-check-label" for="painting">Painting</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="skills" value="Appliance Repair" id="appliance">
+                            <label class="form-check-label" for="appliance">Appliance Repair</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="skills" value="Pest Control" id="pest">
+                            <label class="form-check-label" for="pest">Pest Control</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="skills" value="Home Salon" id="salon">
+                            <label class="form-check-label" for="salon">Home Salon</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="skills" value="Car Wash" id="carwash">
+                            <label class="form-check-label" for="carwash">Car Wash</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="skills" value="AC Service" id="acservice">
+                            <label class="form-check-label" for="acservice">AC Service</label>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Register</button>

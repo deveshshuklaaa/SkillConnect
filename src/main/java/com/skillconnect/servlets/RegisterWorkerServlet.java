@@ -38,14 +38,11 @@ public class RegisterWorkerServlet extends HttpServlet {
                     skillDAO.addSkill(workerSkill);
                 }
             }
-            request.getSession().setAttribute("message", "Registration successful! Please login.");
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("workerRegister.jsp?message=Registration successful! Please login.");
         } else if (result == 1) {
-            request.getSession().setAttribute("error", "Email already exists. Please use a different email.");
-            response.sendRedirect("workerRegister.jsp");
+            response.sendRedirect("workerRegister.jsp?error=Email already exists. Please use a different email.");
         } else {
-            request.getSession().setAttribute("error", "Registration failed due to database error.");
-            response.sendRedirect("workerRegister.jsp");
+            response.sendRedirect("workerRegister.jsp?error=Registration failed due to database error.");
         }
     }
 }

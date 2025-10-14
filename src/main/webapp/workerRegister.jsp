@@ -13,10 +13,19 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2>Worker Registration</h2>
-                <% String error = (String) session.getAttribute("error"); %>
+                <% String message = request.getParameter("message"); %>
+                <% if (message != null) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <%= message %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+                <% String error = request.getParameter("error"); %>
                 <% if (error != null) { %>
-                    <div class="alert alert-danger"><%= error %></div>
-                    <% session.removeAttribute("error"); %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%= error %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 <% } %>
                 <form action="registerWorker" method="post">
                     <div class="mb-3">

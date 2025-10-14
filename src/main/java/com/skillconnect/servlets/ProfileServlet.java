@@ -23,6 +23,38 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
+        String action = request.getParameter("action");
+        if ("changePassword".equals(action)) {
+            // Handle password change
+            String currentPassword = request.getParameter("currentPassword");
+            String newPassword = request.getParameter("newPassword");
+            String confirmPassword = request.getParameter("confirmPassword");
+
+            if (!newPassword.equals(confirmPassword)) {
+                response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?error=New passwords do not match" : "workerProfile.jsp?error=New passwords do not match");
+                return;
+            }
+
+            boolean success = userDAO.changePassword(user.getUserId(), currentPassword, newPassword);
+            if (success) {
+                response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?message=Password changed successfully" : "workerProfile.jsp?message=Password changed successfully");
+            } else {
+                response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?error=Current password is incorrect" : "workerProfile.jsp?error=Current password is incorrect");
+            }
+            return;
+        } else if ("deleteAccount".equals(action)) {
+            // Handle account deletion
+            boolean success = userDAO.deleteUser(user.getUserId());
+            if (success) {
+                session.invalidate();
+                response.sendRedirect("index.jsp?message=Account deleted successfully");
+            } else {
+                response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?error=Failed to delete account" : "workerProfile.jsp?error=Failed to delete account");
+            }
+            return;
+        }
+
+        // Handle profile update
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -36,9 +68,9 @@ public class ProfileServlet extends HttpServlet {
         boolean success = userDAO.updateUser(user);
         if (success) {
             session.setAttribute("user", user);
-            response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?message=Profile updated" : "workerDashboard.jsp?message=Profile updated");
+            response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?message=Profile updated successfully" : "workerProfile.jsp?message=Profile updated successfully");
         } else {
-            response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?error=Update failed" : "workerDashboard.jsp?error=Update failed");
+            response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?error=Profile update failed" : "workerProfile.jsp?error=Profile update failed");
         }
     }
 }
