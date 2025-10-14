@@ -5,10 +5,12 @@
 <%@ page import="com.skillconnect.dao.StatsDAO" %>
 <%@ page import="com.skillconnect.dao.CategoryDAO" %>
 <%@ page import="com.skillconnect.dao.RatingDAO" %>
+<%@ page import="com.skillconnect.dao.ContactDAO" %>
 <%@ page import="com.skillconnect.models.User" %>
 <%@ page import="com.skillconnect.models.Booking" %>
 <%@ page import="com.skillconnect.models.Category" %>
 <%@ page import="com.skillconnect.models.Rating" %>
+<%@ page import="com.skillconnect.models.Contact" %>
 <%@ page import="java.util.List" %>
 <%
     Admin admin = (Admin) session.getAttribute("admin");
@@ -21,6 +23,7 @@
     StatsDAO statsDAO = new StatsDAO();
     CategoryDAO categoryDAO = new CategoryDAO();
     RatingDAO ratingDAO = new RatingDAO();
+    ContactDAO contactDAO = new ContactDAO();
     List<User> users = userDAO.getAllUsers();
     List<Booking> bookings = bookingDAO.getAllBookings();
     int totalUsers = userDAO.getTotalUsers();
@@ -29,6 +32,7 @@
     List<StatsDAO.PopularService> popularServices = statsDAO.getMostPopularServices();
     List<Category> categories = categoryDAO.getAllCategories();
     List<Rating> ratings = ratingDAO.getAllRatings();
+    List<Contact> contacts = contactDAO.getAllContacts();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,6 +76,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#feedback"><i class="bi bi-chat-quote"></i> Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacts"><i class="bi bi-envelope"></i> Contacts</a>
                     </li>
                 </ul>
                 <a class="btn btn-outline-light" href="logout.jsp"><i class="bi bi-box-arrow-right"></i> Logout</a>
@@ -124,7 +131,7 @@
                                             <i class="bi bi-graph-up fs-1"></i>
                                             <h5 class="card-title">Popular Services</h5>
                                             <ul class="list-unstyled mb-0">
-                                                <% for (int i = 0; i < Math.min(3, popularServices.size()); i++) { 
+                                                <% for (int i = 0; i < Math.min(3, popularServices.size()); i++) {
                                                     StatsDAO.PopularService ps = popularServices.get(i); %>
                                                     <li><%= ps.getServiceName() %> (<%= ps.getBookingCount() %>)</li>
                                                 <% } %>
@@ -328,6 +335,47 @@
                                                 <td><%= rating.getFeedback() %></td>
                                                 <td>
                                                     <a href="admin?action=deleteRating&ratingId=<%= rating.getRatingId() %>" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
+                                                </td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manage Contacts -->
+                <div id="contacts" class="section-card">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h4 class="card-title mb-0"><i class="bi bi-envelope"></i> Contact Messages</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Subject</th>
+                                            <th>Message</th>
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (Contact contact : contacts) { %>
+                                            <tr>
+                                                <td><%= contact.getContactId() %></td>
+                                                <td><%= contact.getName() %></td>
+                                                <td><%= contact.getEmail() %></td>
+                                                <td><%= contact.getSubject() %></td>
+                                                <td><%= contact.getMessage().length() > 50 ? contact.getMessage().substring(0, 50) + "..." : contact.getMessage() %></td>
+                                                <td><%= contact.getCreatedAt() %></td>
+                                                <td>
+                                                    <a href="admin?action=deleteContact&contactId=<%= contact.getContactId() %>" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
                                                 </td>
                                             </tr>
                                         <% } %>

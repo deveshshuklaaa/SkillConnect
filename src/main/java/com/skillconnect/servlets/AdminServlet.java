@@ -6,12 +6,14 @@ import com.skillconnect.dao.ServiceDAO;
 import com.skillconnect.dao.BookingDAO;
 import com.skillconnect.dao.RatingDAO;
 import com.skillconnect.dao.StatsDAO;
+import com.skillconnect.dao.ContactDAO;
 import com.skillconnect.models.Admin;
 import com.skillconnect.models.Category;
 import com.skillconnect.models.Service;
 import com.skillconnect.models.Booking;
 import com.skillconnect.models.Rating;
 import com.skillconnect.models.User;
+import com.skillconnect.models.Contact;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
@@ -30,6 +32,7 @@ public class AdminServlet extends HttpServlet {
     private BookingDAO bookingDAO = new BookingDAO();
     private RatingDAO ratingDAO = new RatingDAO();
     private StatsDAO statsDAO = new StatsDAO();
+    private ContactDAO contactDAO = new ContactDAO();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -95,6 +98,9 @@ public class AdminServlet extends HttpServlet {
         } else if ("deleteRating".equals(action)) {
             int ratingId = Integer.parseInt(request.getParameter("ratingId"));
             ratingDAO.deleteRating(ratingId);
+        } else if ("deleteContact".equals(action)) {
+            int contactId = Integer.parseInt(request.getParameter("contactId"));
+            contactDAO.deleteContact(contactId);
         } else if ("getStats".equals(action)) {
             int totalUsers = userDAO.getTotalUsers();
             int activeBookings = statsDAO.getActiveBookingsCount();

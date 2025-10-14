@@ -116,21 +116,21 @@
                     <div class="col-md-4 mb-4">
                         <div class="team-member">
                             <div class="team-avatar">👨‍💼</div>
-                            <h5>John Doe</h5>
+                            <h5>Arvind Shekhawat</h5>
                             <p>CEO & Founder</p>
                         </div>
                     </div>
                     <div class="col-md-4 mb-4">
                         <div class="team-member">
                             <div class="team-avatar">👩‍💻</div>
-                            <h5>Jane Smith</h5>
+                            <h5>Devesh Shukla</h5>
                             <p>Lead Developer</p>
                         </div>
                     </div>
                     <div class="col-md-4 mb-4">
                         <div class="team-member">
                             <div class="team-avatar">👨‍🔧</div>
-                            <h5>Mike Johnson</h5>
+                            <h5>Dhruv Sharma</h5>
                             <p>Operations Manager</p>
                         </div>
                     </div>

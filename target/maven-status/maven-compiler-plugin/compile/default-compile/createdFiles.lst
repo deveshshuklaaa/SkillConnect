@@ -5,13 +5,16 @@ com\skillconnect\models\User.class
 com\skillconnect\dao\BookingDAO.class
 com\skillconnect\dao\StatsDAO$PopularService.class
 com\skillconnect\models\Rating.class
+com\skillconnect\models\Contact.class
 com\skillconnect\utils\DBConnection.class
 com\skillconnect\servlets\ServiceServlet.class
 com\skillconnect\servlets\RegisterWorkerServlet.class
 com\skillconnect\models\Booking.class
 com\skillconnect\dao\RatingDAO.class
+com\skillconnect\dao\ContactDAO.class
 com\skillconnect\dao\WorkerSkillDAO.class
 com\skillconnect\models\WorkerSkill.class
+com\skillconnect\servlets\ContactServlet.class
 com\skillconnect\dao\StatsDAO.class
 com\skillconnect\servlets\RegisterCustomerServlet.class
 com\skillconnect\models\Category.class
