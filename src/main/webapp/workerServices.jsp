@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.skillconnect.models.User" %>
 <%@ page import="com.skillconnect.dao.ServiceDAO" %>
+<%@ page import="com.skillconnect.dao.CategoryDAO" %>
 <%@ page import="com.skillconnect.models.Service" %>
+<%@ page import="com.skillconnect.models.Category" %>
 <%@ page import="java.util.List" %>
 <%
     User user = (User) session.getAttribute("user");
@@ -10,7 +12,9 @@
         return;
     }
     ServiceDAO serviceDAO = new ServiceDAO();
+    CategoryDAO categoryDAO = new CategoryDAO();
     List<Service> services = serviceDAO.getServicesByWorker(user.getUserId());
+    List<Category> categories = categoryDAO.getAllCategories();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,7 +65,7 @@
                         <td>$<%= service.getPrice() %></td>
                         <td><%= service.getStatus() %></td>
                         <td>
-                            <button class="btn btn-sm btn-warning" onclick="editService(<%= service.getServiceId() %>, '<%= service.getServiceName() %>', <%= service.getPrice() %>, '<%= service.getStatus() %>')">Edit</button>
+                            <button class="btn btn-sm btn-warning" onclick="editService(<%= service.getServiceId() %>, '<%= service.getServiceName() %>', <%= service.getPrice() %>, '<%= service.getStatus() %>', <%= service.getCategoryId() %>)">Edit</button>
                             <form action="service" method="post" style="display:inline;">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="serviceId" value="<%= service.getServiceId() %>">
@@ -95,6 +99,14 @@
                             <input type="number" step="0.01" class="form-control" id="price" name="price" required>
                         </div>
                         <div class="mb-3">
+                            <label for="categoryId" class="form-label">Category</label>
+                            <select class="form-select" id="categoryId" name="categoryId" required>
+                                <% for (Category category : categories) { %>
+                                    <option value="<%= category.getCategoryId() %>"><%= category.getCategoryName() %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
                             <select class="form-select" id="status" name="status" required>
                                 <option value="active">Active</option>
@@ -110,13 +122,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function editService(id, name, price, status) {
+        function editService(id, name, price, status, categoryId) {
             document.getElementById('serviceModalTitle').textContent = 'Edit Service';
             document.getElementById('serviceAction').value = 'update';
             document.getElementById('serviceId').value = id;
             document.getElementById('serviceName').value = name;
             document.getElementById('price').value = price;
             document.getElementById('status').value = status;
+            document.getElementById('categoryId').value = categoryId;
             var modal = new bootstrap.Modal(document.getElementById('addServiceModal'));
             modal.show();
         }

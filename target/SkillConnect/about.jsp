@@ -113,25 +113,32 @@
             <div class="container">
                 <h2 class="text-center mb-5">Our Team</h2>
                 <div class="row">
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-3 mb-4">
                         <div class="team-member">
                             <div class="team-avatar">👨‍💼</div>
                             <h5>Arvind Shekhawat</h5>
                             <p>CEO & Founder</p>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-3 mb-4">
                         <div class="team-member">
                             <div class="team-avatar">👩‍💻</div>
                             <h5>Devesh Shukla</h5>
                             <p>Lead Developer</p>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-3 mb-4">
                         <div class="team-member">
                             <div class="team-avatar">👨‍🔧</div>
                             <h5>Dhruv Sharma</h5>
                             <p>Operations Manager</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="team-member">
+                            <div class="team-avatar">👨‍🎨</div>
+                            <h5>Arnav Tawar</h5>
+                            <p>UI Designer</p>
                         </div>
                     </div>
                 </div>

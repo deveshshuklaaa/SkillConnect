@@ -2,13 +2,17 @@
 <%@ page import="com.skillconnect.models.User" %>
 <%@ page import="com.skillconnect.dao.ServiceDAO" %>
 <%@ page import="com.skillconnect.dao.UserDAO" %>
+<%@ page import="com.skillconnect.dao.CategoryDAO" %>
 <%@ page import="com.skillconnect.models.Service" %>
+<%@ page import="com.skillconnect.models.Category" %>
 <%@ page import="java.util.List" %>
 <%
     User user = (User) session.getAttribute("user");
     ServiceDAO serviceDAO = new ServiceDAO();
     UserDAO userDAO = new UserDAO();
+    CategoryDAO categoryDAO = new CategoryDAO();
     List<Service> services = serviceDAO.getAllActiveServices();
+    List<Category> categories = categoryDAO.getAllCategories();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,386 +48,63 @@
                     <label for="locationFilter" class="form-label">Filter by Location</label>
                     <select class="form-select" id="locationFilter">
                         <option value="">All Locations</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Bangalore">Bangalore</option>
-                        <option value="Chennai">Chennai</option>
-                        <option value="Kolkata">Kolkata</option>
+                        <% for (Service service : services) { %>
+                            <% User worker = userDAO.getUserById(service.getWorkerId()); %>
+                            <% if (worker != null && worker.getLocation() != null) { %>
+                                <option value="<%= worker.getLocation() %>"><%= worker.getLocation() %></option>
+                            <% } %>
+                        <% } %>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="serviceFilter" class="form-label">Filter by Service Type</label>
                     <select class="form-select" id="serviceFilter">
                         <option value="">All Services</option>
-                        <option value="Cleaning">Cleaning</option>
-                        <option value="Plumbing">Plumbing</option>
-                        <option value="Electrical">Electrical</option>
-                        <option value="Carpentry">Carpentry</option>
-                        <option value="Painting">Painting</option>
-                        <option value="Appliance Repair">Appliance Repair</option>
-                        <option value="Pest Control">Pest Control</option>
-                        <option value="Home Salon">Home Salon</option>
-                        <option value="Car Wash">Car Wash</option>
-                        <option value="AC Service">AC Service</option>
+                        <% for (Category category : categories) { %>
+                            <option value="<%= category.getCategoryName() %>"><%= category.getCategoryName() %></option>
+                        <% } %>
                     </select>
                 </div>
             </form>
         </div>
         <div class="row" id="servicesContainer">
-            <!-- Sample Services for Delhi -->
-            <div class="col-md-4 mb-4" data-location="Delhi" data-service="Cleaning">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Home Cleaning</h5>
-                        <p class="card-text">Price: ₹500</p>
-                        <p class="card-text">Location: Delhi</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="1">
-                            <input type="hidden" name="workerId" value="4">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
+            <% for (Service service : services) { %>
+                <%
+                    User worker = userDAO.getUserById(service.getWorkerId());
+                    String location = (worker != null) ? worker.getLocation() : "Unknown";
+                    Category category = null;
+                    for (Category c : categories) {
+                        if (c.getCategoryId() == service.getCategoryId()) {
+                            category = c;
+                            break;
+                        }
+                    }
+                    String categoryName = (category != null) ? category.getCategoryName() : "Unknown";
+                %>
+                <div class="col-md-4 mb-4" data-location="<%= location %>" data-service="<%= categoryName %>">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= service.getServiceName() %></h5>
+                            <p class="card-text">Price: ₹<%= service.getPrice() %></p>
+                            <p class="card-text">Location: <%= location %></p>
+                            <p class="card-text">Status: <%= service.getStatus() %></p>
+                            <form action="booking" method="post">
+                                <input type="hidden" name="serviceId" value="<%= service.getServiceId() %>">
+                                <input type="hidden" name="workerId" value="<%= service.getWorkerId() %>">
+                                <div class="mb-3">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" class="form-control" name="date" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Time</label>
+                                    <input type="time" class="form-control" name="time" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Book Now</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Delhi" data-service="Plumbing">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Plumbing Repair</h5>
-                        <p class="card-text">Price: ₹300</p>
-                        <p class="card-text">Location: Delhi</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="2">
-                            <input type="hidden" name="workerId" value="5">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Delhi" data-service="Electrical">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Electrical Wiring</h5>
-                        <p class="card-text">Price: ₹400</p>
-                        <p class="card-text">Location: Delhi</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="3">
-                            <input type="hidden" name="workerId" value="6">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sample Services for Mumbai -->
-            <div class="col-md-4 mb-4" data-location="Mumbai" data-service="Carpentry">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Furniture Repair</h5>
-                        <p class="card-text">Price: ₹350</p>
-                        <p class="card-text">Location: Mumbai</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="4">
-                            <input type="hidden" name="workerId" value="7">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Mumbai" data-service="Painting">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">House Painting</h5>
-                        <p class="card-text">Price: ₹600</p>
-                        <p class="card-text">Location: Mumbai</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="5">
-                            <input type="hidden" name="workerId" value="8">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Mumbai" data-service="Appliance Repair">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">AC Repair</h5>
-                        <p class="card-text">Price: ₹450</p>
-                        <p class="card-text">Location: Mumbai</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="6">
-                            <input type="hidden" name="workerId" value="9">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sample Services for Bangalore -->
-            <div class="col-md-4 mb-4" data-location="Bangalore" data-service="Pest Control">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Pest Control Service</h5>
-                        <p class="card-text">Price: ₹250</p>
-                        <p class="card-text">Location: Bangalore</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="7">
-                            <input type="hidden" name="workerId" value="10">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Bangalore" data-service="Home Salon">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Home Salon Services</h5>
-                        <p class="card-text">Price: ₹800</p>
-                        <p class="card-text">Location: Bangalore</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="8">
-                            <input type="hidden" name="workerId" value="11">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Bangalore" data-service="Car Wash">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Car Wash</h5>
-                        <p class="card-text">Price: ₹200</p>
-                        <p class="card-text">Location: Bangalore</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="9">
-                            <input type="hidden" name="workerId" value="12">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sample Services for Chennai -->
-            <div class="col-md-4 mb-4" data-location="Chennai" data-service="AC Service">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">AC Installation</h5>
-                        <p class="card-text">Price: ₹700</p>
-                        <p class="card-text">Location: Chennai</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="10">
-                            <input type="hidden" name="workerId" value="13">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Chennai" data-service="Cleaning">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Office Cleaning</h5>
-                        <p class="card-text">Price: ₹400</p>
-                        <p class="card-text">Location: Chennai</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="11">
-                            <input type="hidden" name="workerId" value="14">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Chennai" data-service="Plumbing">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Water Leak Fix</h5>
-                        <p class="card-text">Price: ₹250</p>
-                        <p class="card-text">Location: Chennai</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="12">
-                            <input type="hidden" name="workerId" value="15">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sample Services for Kolkata -->
-            <div class="col-md-4 mb-4" data-location="Kolkata" data-service="Electrical">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Fan Installation</h5>
-                        <p class="card-text">Price: ₹300</p>
-                        <p class="card-text">Location: Kolkata</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="13">
-                            <input type="hidden" name="workerId" value="16">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Kolkata" data-service="Carpentry">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Door Repair</h5>
-                        <p class="card-text">Price: ₹400</p>
-                        <p class="card-text">Location: Kolkata</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="14">
-                            <input type="hidden" name="workerId" value="17">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-location="Kolkata" data-service="Painting">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Wall Painting</h5>
-                        <p class="card-text">Price: ₹500</p>
-                        <p class="card-text">Location: Kolkata</p>
-                        <p class="card-text">Status: active</p>
-                        <form action="booking" method="post">
-                            <input type="hidden" name="serviceId" value="15">
-                            <input type="hidden" name="workerId" value="18">
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" name="date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" name="time" required>
-                            </div>
-                            <button type="submit" class="btn btn-success">Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <% } %>
         </div>
     </div>
 
