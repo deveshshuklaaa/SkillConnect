@@ -22,9 +22,15 @@ public class RegisterWorkerServlet extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
         String phone = request.getParameter("phone");
         String location = request.getParameter("location");
         String[] skills = request.getParameterValues("skills");
+
+        if (!password.equals(confirmPassword)) {
+            response.sendRedirect("workerRegister.jsp?error=Passwords do not match.");
+            return;
+        }
 
         User user = new User(0, name, email, password, phone, "worker", location);
         int result = userDAO.registerUser(user);

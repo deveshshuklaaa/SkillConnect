@@ -44,6 +44,12 @@ public class ProfileServlet extends HttpServlet {
             return;
         } else if ("deleteAccount".equals(action)) {
             // Handle account deletion
+            String password = request.getParameter("password");
+            User verifiedUser = userDAO.loginUser(user.getEmail(), password);
+            if (verifiedUser == null) {
+                response.sendRedirect(user.getRole().equals("customer") ? "profile.jsp?error=Incorrect password" : "workerProfile.jsp?error=Incorrect password");
+                return;
+            }
             boolean success = userDAO.deleteUser(user.getUserId());
             if (success) {
                 session.invalidate();

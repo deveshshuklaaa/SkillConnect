@@ -1,9 +1,21 @@
-# TODO: Fix Filter by Service in serviceList.jsp
+# TODO: Implement Password Security Features
 
-## Tasks
-- [x] Update workerServices.jsp to include category selection in add/edit service form
-- [x] Update JavaScript in workerServices.jsp to handle categoryId in edit function
-- [x] Update ServiceServlet.java to retrieve categoryId from add form (remove hardcoded default)
-- [x] Update serviceList.jsp to dynamically generate service cards using database data
-- [x] Ensure data-location and data-service attributes are set correctly for filtering
-- [ ] Test the filter functionality after changes
+## 1. Add Show Password Button to Login and Register Pages
+- [x] Update login.jsp to include show password toggle
+- [x] Update customerRegister.jsp to include show password toggle for password and confirm password
+- [x] Update workerRegister.jsp to include show password toggle for password and confirm password
+
+## 2. Add Confirm Password Field to Registration Pages
+- [x] Add confirm password field to customerRegister.jsp
+- [x] Add confirm password field to workerRegister.jsp
+- [ ] Update RegisterWorkerServlet.java to validate password match
+
+## 3. Add Password Confirmation to Delete Account
+- [ ] Update profile.jsp to include password input in delete account modal
+- [ ] Update workerProfile.jsp to include password input in delete account modal
+- [ ] Update ProfileServlet.java to verify password before deleting account
+
+## 4. Testing
+- [ ] Test registration with confirm password validation
+- [ ] Test login with show password
+- [ ] Test delete account with password confirmation

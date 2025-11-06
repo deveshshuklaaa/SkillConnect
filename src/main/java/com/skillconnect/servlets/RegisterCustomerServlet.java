@@ -18,8 +18,14 @@ public class RegisterCustomerServlet extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
         String phone = request.getParameter("phone");
         String location = request.getParameter("location");
+
+        if (!password.equals(confirmPassword)) {
+            response.sendRedirect("customerRegister.jsp?error=Passwords do not match.");
+            return;
+        }
 
         User user = new User(0, name, email, password, phone, "customer", location);
         int result = userDAO.registerUser(user);

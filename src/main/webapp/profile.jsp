@@ -112,6 +112,10 @@
                 <div class="modal-body">
                     <p>Are you sure you want to delete your account? This action cannot be undone.</p>
                     <p class="text-danger">All your bookings, ratings, and profile information will be permanently removed.</p>
+                    <div class="mb-3">
+                        <label for="deletePassword" class="form-label">Enter your password to confirm</label>
+                        <input type="password" class="form-control" id="deletePassword" name="password" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
