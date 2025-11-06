@@ -72,7 +72,15 @@
                         Rating rating = ratingDAO.getRatingByBooking(booking.getBookingId());
                     %>
                     <tr>
-                        <td><%= customer != null ? customer.getName() : "Unknown" %></td>
+                        <td>
+                            <%= customer != null ? customer.getName() : "Unknown" %>
+                            <% if (customer != null && customer.getPhone() != null && !customer.getPhone().isEmpty()) { %>
+                                <br><%= customer.getPhone() %>
+                            <% } %>
+                            <% if (customer != null && customer.getLocation() != null && !customer.getLocation().isEmpty()) { %>
+                                <br><%= customer.getLocation() %>
+                            <% } %>
+                        </td>
                         <td><%= service != null ? service.getServiceName() : "Unknown" %></td>
                         <td><%= booking.getBookingDate() %></td>
                         <td><%= booking.getBookingTime() %></td>

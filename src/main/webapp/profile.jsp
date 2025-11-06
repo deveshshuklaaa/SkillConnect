@@ -52,7 +52,14 @@
             </div>
             <div class="mb-3">
                 <label for="location" class="form-label">Location</label>
-                <input type="text" class="form-control" id="location" name="location" value="<%= user.getLocation() %>">
+                <select class="form-control" id="location" name="location">
+                    <option value="">Select Location</option>
+                    <option value="Mumbai" <%= "Mumbai".equals(user.getLocation()) ? "selected" : "" %>>Mumbai</option>
+                    <option value="Bangalore" <%= "Bangalore".equals(user.getLocation()) ? "selected" : "" %>>Bangalore</option>
+                    <option value="Chennai" <%= "Chennai".equals(user.getLocation()) ? "selected" : "" %>>Chennai</option>
+                    <option value="Kolkata" <%= "Kolkata".equals(user.getLocation()) ? "selected" : "" %>>Kolkata</option>
+                    <option value="Delhi" <%= "Delhi".equals(user.getLocation()) ? "selected" : "" %>>Delhi</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Update Profile</button>
             <button type="button" class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>

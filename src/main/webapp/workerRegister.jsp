@@ -60,7 +60,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="location" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="location" name="location" required>
+                        <select class="form-control" id="location" name="location" required>
+                            <option value="">Select Location</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Kolkata">Kolkata</option>
+                            <option value="Delhi">Delhi</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Skills (Select multiple)</label>

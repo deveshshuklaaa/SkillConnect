@@ -62,7 +62,7 @@
                 <% for (Service service : services) { %>
                     <tr>
                         <td><%= service.getServiceName() %></td>
-                        <td>$<%= service.getPrice() %></td>
+                        <td>&#8377;<%= service.getPrice() %></td>
                         <td><%= service.getStatus() %></td>
                         <td>
                             <button class="btn btn-sm btn-warning" onclick="editService(<%= service.getServiceId() %>, '<%= service.getServiceName() %>', <%= service.getPrice() %>, '<%= service.getStatus() %>', <%= service.getCategoryId() %>)">Edit</button>

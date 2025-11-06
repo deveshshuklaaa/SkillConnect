@@ -3,6 +3,7 @@
 <%@ page import="com.skillconnect.dao.ServiceDAO" %>
 <%@ page import="com.skillconnect.dao.UserDAO" %>
 <%@ page import="com.skillconnect.dao.CategoryDAO" %>
+<%@ page import="com.skillconnect.dao.RatingDAO" %>
 <%@ page import="com.skillconnect.models.Service" %>
 <%@ page import="com.skillconnect.models.Category" %>
 <%@ page import="java.util.List" %>
@@ -11,6 +12,7 @@
     ServiceDAO serviceDAO = new ServiceDAO();
     UserDAO userDAO = new UserDAO();
     CategoryDAO categoryDAO = new CategoryDAO();
+    RatingDAO ratingDAO = new RatingDAO();
     List<Service> services = serviceDAO.getAllActiveServices();
     List<Category> categories = categoryDAO.getAllCategories();
 %>
@@ -48,12 +50,11 @@
                     <label for="locationFilter" class="form-label">Filter by Location</label>
                     <select class="form-select" id="locationFilter">
                         <option value="">All Locations</option>
-                        <% for (Service service : services) { %>
-                            <% User worker = userDAO.getUserById(service.getWorkerId()); %>
-                            <% if (worker != null && worker.getLocation() != null) { %>
-                                <option value="<%= worker.getLocation() %>"><%= worker.getLocation() %></option>
-                            <% } %>
-                        <% } %>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Delhi">Delhi</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -80,14 +81,18 @@
                         }
                     }
                     String categoryName = (category != null) ? category.getCategoryName() : "Unknown";
+                    double avgRating = ratingDAO.getAverageRating(service.getWorkerId());
                 %>
                 <div class="col-md-4 mb-4" data-location="<%= location %>" data-service="<%= categoryName %>">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><%= service.getServiceName() %></h5>
+                            <p class="card-text">By: <%= worker.getName() %></p>
                             <p class="card-text">Price: ₹<%= service.getPrice() %></p>
                             <p class="card-text">Location: <%= location %></p>
                             <p class="card-text">Status: <%= service.getStatus() %></p>
+                            <p class="card-text">Phone: <%= worker.getPhone() %></p>
+                            <p class="card-text">Average Rating: <%= avgRating == 0.0 ? "No ratings yet" : String.format("%.1f", avgRating) %></p>
                             <form action="booking" method="post">
                                 <input type="hidden" name="serviceId" value="<%= service.getServiceId() %>">
                                 <input type="hidden" name="workerId" value="<%= service.getWorkerId() %>">
